@@ -49,7 +49,6 @@
         <h1>M3U8 视频解析</h1>
         <div class="input-group mb-3">
             <input type="text" id="videoUrl" class="form-control" placeholder="请输入视频链接">
-            <button id="fetchM3u8" class="btn btn-primary">获取 M3U8 链接</button>
         </div>
 
         <!-- 解析按钮 -->
@@ -73,12 +72,12 @@
             const httpsIndex = url.indexOf('https://');
             // 取第一个有效协议的位置
             const startIndex = Math.max(
-                httpIndex !== -1 ? httpIndex : Infinity,
-                httpsIndex !== -1 ? httpsIndex : Infinity
+                httpIndex !== -1 ? httpIndex : -1,
+                httpsIndex !== -1 ? httpsIndex : -1
             );
             // 如果找到协议，截取从协议开始的部分
-            if (startIndex !== Infinity) {
-                return url.substring(startIndex);
+            if (startIndex !== -1) {
+                url = url.substring(startIndex)
             }
             // 如果没有找到协议，返回原始链接
             return url;
@@ -87,10 +86,11 @@
         // 跳转到解析网站
         function parseVideo(baseUrl) {
             const videoUrl = document.getElementById('videoUrl').value;
+            console.log(videoUrl);
             if (videoUrl) {
                 // 清理链接
                 const cleanedUrl = cleanUrl(videoUrl);
-                const fullUrl = baseUrl + encodeURIComponent(cleanedUrl);
+                const fullUrl = baseUrl + cleanedUrl;
                 window.open(fullUrl, '_blank');
             } else {
                 alert('请输入视频链接');
