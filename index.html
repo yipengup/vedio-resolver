@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M3U8 视频解析</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn {
+            flex: 1 1 calc(50% - 10px); /* 每行显示两个按钮 */
+            max-width: calc(50% - 10px);
+        }
+        #player {
+            margin-top: 20px;
+            display: none; /* 默认隐藏播放器 */
+        }
+        video {
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>M3U8 视频解析</h1>
+        <div class="input-group mb-3">
+            <input type="text" id="videoUrl" class="form-control" placeholder="请输入视频链接">
+            <button id="fetchM3u8" class="btn btn-primary">获取 M3U8 链接</button>
+        </div>
+
+        <!-- 解析按钮 -->
+        <div class="btn-group">
+            <button class="btn btn-success" onclick="parseVideo('https://hoplayer.com/index.html?url=')">hoplayer</button>
+            <button class="btn btn-success" onclick="parseVideo('https://www.snplayer.com/?url=')">snplayer</button>
+            <button class="btn btn-success" onclick="parseVideo('https://www.hnjiexi.com/m3u8/?url=')">hnjiexi</button>
+            <button class="btn btn-success" onclick="parseVideo('https://www.hongniujiexi.com/m3u8/?url=')">hongniujiexi</button>
+        </div>
+    </div>
+
+    <!-- 引入 Bootstrap JS 和依赖 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 清理链接中的特殊符号
+        function cleanUrl(url) {
+            // 去掉链接开头和结尾的空格、换行符等
+            url = url.trim();
+            // 找到 https:// 或 http:// 的位置
+            const httpIndex = url.indexOf('http://');
+            const httpsIndex = url.indexOf('https://');
+            // 取第一个有效协议的位置
+            const startIndex = Math.max(
+                httpIndex !== -1 ? httpIndex : Infinity,
+                httpsIndex !== -1 ? httpsIndex : Infinity
+            );
+            // 如果找到协议，截取从协议开始的部分
+            if (startIndex !== Infinity) {
+                return url.substring(startIndex);
+            }
+            // 如果没有找到协议，返回原始链接
+            return url;
+        }
+
+        // 跳转到解析网站
+        function parseVideo(baseUrl) {
+            const videoUrl = document.getElementById('videoUrl').value;
+            if (videoUrl) {
+                // 清理链接
+                const cleanedUrl = cleanUrl(videoUrl);
+                const fullUrl = baseUrl + encodeURIComponent(cleanedUrl);
+                window.open(fullUrl, '_blank');
+            } else {
+                alert('请输入视频链接');
+            }
+        }
+    </script>
+</body>
+</html>
